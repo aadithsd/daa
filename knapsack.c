@@ -1,57 +1,53 @@
 #include<stdio.h>
 #include<conio.h>
 
+
 int max(int a, int b)
 {
     return (a>b)?a:b;
 }
 
-int knapsack(int wt[], int val[] , int n, int W)
+int knapsack(int wt[], int val[], int capacity, int n)
 {
     int i,w;
-    int dp[25][50];   
+    int dp[20][25];
 
     for(i=0;i<=n;i++)
     {
-        for(w=0;w<=W;w++)
+        for(w=0;w<=capacity;w++)
         {
             if(i==0 || w==0)
                 dp[i][w]=0;
 
-            else if(wt[i] <= w)
-                dp[i][w] = max(
-                    val[i] + dp[i-1][w-wt[i]],
-                    dp[i-1][w]
-                );
-
+            else if(wt[i]<=w)
+                dp[i][w]=max(val[i]+dp[i-1][w-wt[i]],dp[i-1][w]);
             else
-                dp[i][w] = dp[i-1][w];
+                dp[i][w]=dp[i-1][w];
         }
     }
-    return dp[n][W];
+    return dp[n][capacity];
 }
 
-void main()
+int main()
 {
-    int n,i,wt[25],val[25],W,res;
+    int n,i,j;
+    int val[20],wt[20];
+    int capacity,res;
 
-    clrscr();
-
-    printf("Enter number of items: ");
+    printf("enter number of items: ");
     scanf("%d",&n);
 
     for(i=1;i<=n;i++)
     {
-        printf("Enter weight and profit of item %d: ",i);
+        printf("enter weight and capacity of item %d: ",i);
         scanf("%d %d",&wt[i],&val[i]);
     }
 
-    printf("Enter capacity: ");
-    scanf("%d",&W);
+    printf("enter max capacity: ");
+    scanf("%d",&capacity);
 
-    res = knapsack(wt,val,n,W);
+    res=knapsack(wt,val,capacity,n);
+    printf("max profit: %d",res);
 
-    printf("\nMaximum profit = %d",res);
-
-    getch();
+    return 0;
 }
